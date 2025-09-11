@@ -4,18 +4,12 @@
 #define MAX_AIRPLANES 200
 #define inner_string_size 50
 
-int count = 0;
-int total_airplanes = 0;
-int aviable = 0;
-int under_maintenance = 0;
-int in_flight = 0;
-int id_counter = 0;
-
 typedef struct {
     int day;
     int month;
     int year;
 } date;
+
 typedef struct {
     date entryDate;
     char modele[50];
@@ -23,12 +17,19 @@ typedef struct {
     int capacite;
     char statut[20];
 } airplanes;
-airplanes newairplan[MAX_AIRPLANES];
-
 
 typedef struct {
-
+    char name[100];
+    int max_capacity;
+    int count;
+    int total_airplanes;
+    int aviable;
+    int under_maintenance;
+    int in_flight;
+    int id_counter;
+    airplanes newairplan[MAX_AIRPLANES];
 } airport;
+airport newAirport;
 
 void Menu();
 void UserChoice(int choice);
@@ -43,9 +44,18 @@ void aviability();
 void update_modele();
 void statistics();
 void sort();
-// void dateEntree();
+double Fleet_Occupancy();
+void airPort();
 
 int main() {
+    newAirport.count = 0;
+    newAirport.total_airplanes = 0;
+    newAirport.aviable = 0;
+    newAirport.under_maintenance = 0;
+    newAirport.in_flight = 0;
+    newAirport.id_counter = 0;
+    strcpy(newAirport.name, "Default Airport");
+    newAirport.max_capacity = MAX_AIRPLANES;
     int choice;
     do {
         Menu();
@@ -115,10 +125,11 @@ void UserChoice(int choice) {
             } while (airplaneChoice != 0);
             break;
         case 2:
-            printf("nothing!!!!!!!!!!.\n");
+            printf("Airport Name: %s\n", newAirport.name);
+            printf("Max Capacity: %d\n", newAirport.max_capacity);
             break;
         case 3:
-            printf("Nothing!!!!!!!!!.\n");
+            printf("Fleet Occupancy Coefficient: %.2f%%\n", Fleet_Occupancy());
             break;
         case 4:
             statistics();
@@ -134,29 +145,29 @@ void UserChoice(int choice) {
 
 void addAirplane() {
     int choice;
-    if (count >= MAX_AIRPLANES) {
+    if (newAirport.count >= newAirport.max_capacity) {
         printf("\nNo space available. Maximum capacity reached.\n");
         return;
     }
 
-    id_counter++;
-    newairplan[count].id = id_counter;
-    printf("\nAirplane id is #%d\n", newairplan[count].id);
+    newAirport.id_counter++;
+    newAirport.newairplan[newAirport.count].id = newAirport.id_counter;
+    printf("\nAirplane id is #%d\n", newAirport.newairplan[newAirport.count].id);
     
     printf("\nEnter the entry date\n");
     printf("\nEnter the day : ");
-    scanf("%d", &newairplan[count].entryDate.day);
+    scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.day);
     printf("\nEnter the month : ");
-    scanf("%d", &newairplan[count].entryDate.month);
+    scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.month);
     printf("\nEnter the year : ");
-    scanf("%d", &newairplan[count].entryDate.year);
+    scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.year);
     while (getchar() != '\n');
     printf("Enter the modele of the plane: ");
-    fgets(newairplan[count].modele, inner_string_size, stdin);
-    newairplan[count].modele[strcspn(newairplan[count].modele, "\n")] = 0;
+    fgets(newAirport.newairplan[newAirport.count].modele, inner_string_size, stdin);
+    newAirport.newairplan[newAirport.count].modele[strcspn(newAirport.newairplan[newAirport.count].modele, "\n")] = 0;
 
     printf("Enter the capacite: ");
-    scanf("%d", &newairplan[count].capacite);
+    scanf("%d", &newAirport.newairplan[newAirport.count].capacite);
     while (getchar() != '\n');
 
     aviability();
@@ -164,44 +175,45 @@ void addAirplane() {
     while (getchar() != '\n');
 
     if (choice == 1) {
-        strcpy(newairplan[count].statut, "Available");
-        aviable++;
+        strcpy(newAirport.newairplan[newAirport.count].statut, "Available");
+        newAirport.aviable++;
     } else if (choice == 2) {
-        strcpy(newairplan[count].statut, "Under maintenance");
-        under_maintenance++;
+        strcpy(newAirport.newairplan[newAirport.count].statut, "Under maintenance");
+        newAirport.under_maintenance++;
     } else if (choice == 3) {
-        strcpy(newairplan[count].statut, "In flight");
-        in_flight++;
+        strcpy(newAirport.newairplan[newAirport.count].statut, "In flight");
+        newAirport.in_flight++;
     } else {
         printf("Invalid choice. Setting it to 'Unknown'.\n");
-        strcpy(newairplan[count].statut, "Unknown");
+        strcpy(newAirport.newairplan[newAirport.count].statut, "Unknown");
     }
 
     printf("\nAdded successfully!\n");
-    count++;
-    total_airplanes++;
+    newAirport.count++;
+    newAirport.total_airplanes++;
 }
 
 void viewAirplanes() {
-    if (count == 0) {
+    if (newAirport.count == 0) {
         printf("\nNo Airplanes available.\n");
         return;
     }
     printf("\nAvailable airplanes\n");
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < newAirport.count; i++) {
         printf("airplane #%d\n", i + 1);
-        printf("ID: %d\n", newairplan[i].id);
-        printf("Date of entry: %d-%d-%d\n", newairplan[i].entryDate.day, newairplan[i].entryDate.month, newairplan[i].entryDate.year);
-        printf("Modele: %s\n", newairplan[i].modele);
-        printf("Statut: %s\n", newairplan[i].statut);
-        printf("Capacite: %d\n", newairplan[i].capacite);
+        printf("ID: %d\n", newAirport.newairplan[i].id);
+        printf("Date of entry: %d-%d-%d\n", newAirport.newairplan[i].entryDate.day, newAirport.newairplan[i].entryDate.month, newAirport.newairplan[i].entryDate.year);
+        printf("Modele: %s\n", newAirport.newairplan[i].modele);
+        printf("Statut: %s\n", newAirport.newairplan[i].statut);
+        printf("Capacite: %d\n", newAirport.newairplan[i].capacite);
         printf("\n");
     }
 }
+
 void deletAirplanes() {
     int search_id;
     int found_index = -1;
-    if (count == 0) {
+    if (newAirport.count == 0) {
         printf("No airplanes to delete.\n");
         return;
     }
@@ -209,27 +221,27 @@ void deletAirplanes() {
     scanf("%d", &search_id);
     while (getchar() != '\n');
 
-    for (int i = 0; i < count; i++) {
-        if (newairplan[i].id == search_id) {
+    for (int i = 0; i < newAirport.count; i++) {
+        if (newAirport.newairplan[i].id == search_id) {
             found_index = i;
             break;
         }
     }
 
     if (found_index != -1) {
-        if (strcmp(newairplan[found_index].statut, "Available") == 0) {
-            aviable--;
-        } else if (strcmp(newairplan[found_index].statut, "Under maintenance") == 0) {
-            under_maintenance--;
-        } else if (strcmp(newairplan[found_index].statut, "In flight") == 0) {
-            in_flight--;
+        if (strcmp(newAirport.newairplan[found_index].statut, "Available") == 0) {
+            newAirport.aviable--;
+        } else if (strcmp(newAirport.newairplan[found_index].statut, "Under maintenance") == 0) {
+            newAirport.under_maintenance--;
+        } else if (strcmp(newAirport.newairplan[found_index].statut, "In flight") == 0) {
+            newAirport.in_flight--;
         }
 
-        for (int j = found_index; j < count - 1; j++) {
-            newairplan[j] = newairplan[j + 1];
+        for (int j = found_index; j < newAirport.count - 1; j++) {
+            newAirport.newairplan[j] = newAirport.newairplan[j + 1];
         }
-        count--;
-        total_airplanes--;
+        newAirport.count--;
+        newAirport.total_airplanes--;
         printf("Airplane with ID %d deleted successfully.\n", search_id);
     } else {
         printf("There is no airplane with that ID %d\n", search_id);
@@ -271,8 +283,8 @@ void update_modele() {
     scanf("%d", &search_id);
     while (getchar() != '\n');
 
-    for (int i = 0; i < count; i++) {
-        if (newairplan[i].id == search_id) {
+    for (int i = 0; i < newAirport.count; i++) {
+        if (newAirport.newairplan[i].id == search_id) {
             found_index = i;
             break;
         }
@@ -283,7 +295,7 @@ void update_modele() {
         printf("Enter the new modele: ");
         fgets(new_modele, 50, stdin);
         new_modele[strcspn(new_modele, "\n")] = 0;
-        strcpy(newairplan[found_index].modele, new_modele);
+        strcpy(newAirport.newairplan[found_index].modele, new_modele);
         printf("\nUpdated successfully!\n");
     } else {
         printf("There is no airplane with that ID %d\n", search_id);
@@ -297,8 +309,8 @@ void update_statut() {
     scanf("%d", &search_id);
     while (getchar() != '\n');
 
-    for (int i = 0; i < count; i++) {
-        if (newairplan[i].id == search_id) {
+    for (int i = 0; i < newAirport.count; i++) {
+        if (newAirport.newairplan[i].id == search_id) {
             found_index = i;
             break;
         }
@@ -307,31 +319,31 @@ void update_statut() {
     if (found_index != -1) {
         int choice = 0;
         char old_statut[20];
-        strcpy(old_statut, newairplan[found_index].statut);
+        strcpy(old_statut, newAirport.newairplan[found_index].statut);
         
         aviability();
         scanf("%d", &choice);
         while (getchar() != '\n');
 
-        if (strcmp(old_statut, "Available") == 0) aviable--;
-        else if (strcmp(old_statut, "Under maintenance") == 0) under_maintenance--;
-        else if (strcmp(old_statut, "In flight") == 0) in_flight--;
+        if (strcmp(old_statut, "Available") == 0) newAirport.aviable--;
+        else if (strcmp(old_statut, "Under maintenance") == 0) newAirport.under_maintenance--;
+        else if (strcmp(old_statut, "In flight") == 0) newAirport.in_flight--;
 
         if (choice == 1) {
-            strcpy(newairplan[found_index].statut, "Available");
-            aviable++;
+            strcpy(newAirport.newairplan[found_index].statut, "Available");
+            newAirport.aviable++;
         } else if (choice == 2) {
-            strcpy(newairplan[found_index].statut, "Under maintenance");
-            under_maintenance++;
+            strcpy(newAirport.newairplan[found_index].statut, "Under maintenance");
+            newAirport.under_maintenance++;
         } else if (choice == 3) {
-            strcpy(newairplan[found_index].statut, "In flight");
-            in_flight++;
+            strcpy(newAirport.newairplan[found_index].statut, "In flight");
+            newAirport.in_flight++;
         } else {
             printf("Invalid choice. Status not updated.\n");
-            strcpy(newairplan[found_index].statut, old_statut); 
-            if (strcmp(old_statut, "Available") == 0) aviable++;
-            else if (strcmp(old_statut, "Under maintenance") == 0) under_maintenance++;
-            else if (strcmp(old_statut, "In flight") == 0) in_flight++;
+            strcpy(newAirport.newairplan[found_index].statut, old_statut); 
+            if (strcmp(old_statut, "Available") == 0) newAirport.aviable++;
+            else if (strcmp(old_statut, "Under maintenance") == 0) newAirport.under_maintenance++;
+            else if (strcmp(old_statut, "In flight") == 0) newAirport.in_flight++;
         }
         printf("\nUpdated successfully!\n");
     } else {
@@ -345,8 +357,8 @@ void update_capacity() {
     printf("Enter the ID: ");
     scanf("%d", &search_id);
     while (getchar() != '\n');
-    for (int i = 0; i < count; i++) {
-        if (newairplan[i].id == search_id) {
+    for (int i = 0; i < newAirport.count; i++) {
+        if (newAirport.newairplan[i].id == search_id) {
             found_index = i;
             break;
         }
@@ -357,7 +369,7 @@ void update_capacity() {
         printf("Enter the new capacity: ");
         scanf("%d", &new_capacity);
         while (getchar() != '\n');
-        newairplan[found_index].capacite = new_capacity;
+        newAirport.newairplan[found_index].capacite = new_capacity;
         printf("\nUpdated successfully!\n");
     } else {
         printf("There is no airplane with that ID %d\n", search_id);
@@ -374,34 +386,97 @@ void aviability() {
 
 void statistics() {
     printf("\n Airport Statistics \n");
-    printf("Total Airplanes: %d\n", total_airplanes);
-    printf("Available: %d\n", aviable);
-    printf("Under Maintenance: %d\n", under_maintenance);
-    printf("In Flight: %d\n", in_flight);
+    printf("Total Airplanes: %d\n", newAirport.total_airplanes);
+    printf("Available: %d\n", newAirport.aviable);
+    printf("Under Maintenance: %d\n", newAirport.under_maintenance);
+    printf("In Flight: %d\n", newAirport.in_flight);
     int total_fleet_capcity = 0;
-    for(int i = 0; i<count; i++){
-        total_fleet_capcity = total_fleet_capcity + newairplan[i].capacite;
+    for(int i = 0; i < newAirport.count; i++){
+        total_fleet_capcity = total_fleet_capcity + newAirport.newairplan[i].capacite;
     }
-    printf("Total fleet capacity is %d.", total_fleet_capcity);
+    printf("Total fleet capacity is %d.\n", total_fleet_capcity);
 }
 
-void sort(){
-    airplanes swap;
-    for(int i =0; i<count - 1; i++){
-        for(int j =0; j< count - 1; j++){
-            if (newairplan[j].capacite > newairplan[j + 1].capacite) {
-                swap = newairplan[j];
-                newairplan[j] = newairplan[j + 1];
-                newairplan[j + 1] = swap;
+void sort() {
+    int tempChoice;
+    printf(" 1. sort by capacity \n");
+    printf(" 2. sort alphabiticly \n");
+    scanf("%d", &tempChoice);
+    while (getchar() != '\n'); 
+    
+    if (tempChoice == 1) {
+        airplanes swap;
+        for (int i = 0; i < newAirport.count - 1; i++) {
+            for (int j = 0; j < newAirport.count - 1 - i; j++) {
+                if (newAirport.newairplan[j].capacite > newAirport.newairplan[j + 1].capacite) {
+                    swap = newAirport.newairplan[j];
+                    newAirport.newairplan[j] = newAirport.newairplan[j + 1];
+                    newAirport.newairplan[j + 1] = swap;
+                }
             }
         }
+        printf("\nAirplanes sorted by capacity.\n");
+    } else if (tempChoice == 2) {
+        airplanes swap_alpha;
+        for (int i = 0; i < newAirport.count - 1; i++) {
+            for (int j = 0; j < newAirport.count - 1 - i; j++) {
+                if (strcmp(newAirport.newairplan[j].modele, newAirport.newairplan[j + 1].modele) > 0) {
+                    swap_alpha = newAirport.newairplan[j];
+                    newAirport.newairplan[j] = newAirport.newairplan[j + 1];
+                    newAirport.newairplan[j + 1] = swap_alpha;
+                }
+            }
+        }
+        printf("\nAirplanes sorted alphabetically by modele.\n");
+    } else {
+        printf("Invalid choice.\n");
     }
 }
 
-// void dateEntree(){
-//     printf("date of entre");
-//     printf("Enter the day : ");
-//     printf("Enter the month : ");
-//     printf("enter the year : ");
+void airPort(){
+    int choice3;
+    printf("\n 1. Calculate Fleet Occupancy Coefficient \n");
+    printf(" 2. Add a new aircraft to the fleet \n");
+    printf(" 3. Update an aircraft's status \n");
+    printf(" 4. Display the status of all aircraft \n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice3);
+    while (getchar() != '\n');
+    switch (choice3) {
+        case 1:
+            printf("Fleet Occupancy Coefficient: %.2f%%\n", Fleet_Occupancy());
+            break;
+        case 2:
+            addAirplane();
+            break;
+        case 3:
+            update_statut();
+            break;
+        case 4:
+            if (newAirport.count == 0) {
+                printf("No airplanes to display.\n");
+                break;
+            }
+            for (int i = 0; i < newAirport.count; i++) {
+                printf("airplane #%d\n", i + 1);
+                printf("Modele: %s\n", newAirport.newairplan[i].modele);
+                printf("Statut: %s\n", newAirport.newairplan[i].statut);
+                printf("\n");
+            }
+            break;
+        case 0:
+            return;
+        default:
+            printf("Invalid choice.\n");
+            break;
+    }
+}
 
-// }
+double Fleet_Occupancy() {
+    if (newAirport.total_airplanes == 0) {
+        printf("Total of airplanes is zero.\n");
+        return 0;
+    }
+    double occupancy_co = ((double)newAirport.aviable / newAirport.total_airplanes) * 100;
+    return occupancy_co;
+}
