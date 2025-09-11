@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 
 #define MAX_AIRPLANES 200
 #define inner_string_size 50
@@ -67,7 +66,7 @@ void AirplaneMenu() {
     printf("1. Add New Airplane\n");
     printf("2. View All Airplanes\n");
     printf("3. Update Airplane\n");
-    printf("4. Sort airplanes");
+    printf("4. Sort airplanes\n");
     printf("5. Delete Airplane\n");
     printf("0. Back to Main Menu\n");
 }
@@ -94,11 +93,12 @@ void UserChoice(int choice) {
                         update_Airplane();
                         break;
                     case 4:
+                        sort();
+                        break;
+                    case 5:
                         printf("Deleting an airplane\n");
                         deletAirplanes();
                         break;
-                    case 5:
-                        sort();
                     case 0:
                         printf("Returning to main menu\n");
                         break;
@@ -132,11 +132,11 @@ void addAirplane() {
         printf("\nNo space available. Maximum capacity reached.\n");
         return;
     }
-    
+
     id_counter++;
     newairplan[count].id = id_counter;
     printf("\nAirplane id is #%d\n", newairplan[count].id);
-    
+
     printf("Enter the modele of the plane: ");
     fgets(newairplan[count].modele, inner_string_size, stdin);
     newairplan[count].modele[strcspn(newairplan[count].modele, "\n")] = 0;
@@ -255,7 +255,7 @@ void update_modele() {
     printf("Enter the ID: ");
     scanf("%d", &search_id);
     while (getchar() != '\n');
-    
+
     for (int i = 0; i < count; i++) {
         if (newairplan[i].id == search_id) {
             found_index = i;
@@ -281,7 +281,7 @@ void update_statut() {
     printf("Enter the ID: ");
     scanf("%d", &search_id);
     while (getchar() != '\n');
-    
+
     for (int i = 0; i < count; i++) {
         if (newairplan[i].id == search_id) {
             found_index = i;
@@ -298,23 +298,25 @@ void update_statut() {
         scanf("%d", &choice);
         while (getchar() != '\n');
 
+        if (strcmp(old_statut, "Available") == 0) aviable--;
+        else if (strcmp(old_statut, "Under maintenance") == 0) under_maintenance--;
+        else if (strcmp(old_statut, "In flight") == 0) in_flight--;
+
         if (choice == 1) {
             strcpy(newairplan[found_index].statut, "Available");
-            if (strcmp(old_statut, "Under maintenance") == 0) under_maintenance--;
-            else if (strcmp(old_statut, "In flight") == 0) in_flight--;
             aviable++;
         } else if (choice == 2) {
             strcpy(newairplan[found_index].statut, "Under maintenance");
-            if (strcmp(old_statut, "Available") == 0) aviable--;
-            else if (strcmp(old_statut, "In flight") == 0) in_flight--;
             under_maintenance++;
         } else if (choice == 3) {
             strcpy(newairplan[found_index].statut, "In flight");
-            if (strcmp(old_statut, "Available") == 0) aviable--;
-            else if (strcmp(old_statut, "Under maintenance") == 0) under_maintenance--;
             in_flight++;
         } else {
             printf("Invalid choice. Status not updated.\n");
+            strcpy(newairplan[found_index].statut, old_statut); 
+            if (strcmp(old_statut, "Available") == 0) aviable++;
+            else if (strcmp(old_statut, "Under maintenance") == 0) under_maintenance++;
+            else if (strcmp(old_statut, "In flight") == 0) in_flight++;
         }
         printf("\nUpdated successfully!\n");
     } else {
@@ -328,7 +330,6 @@ void update_capacity() {
     printf("Enter the ID: ");
     scanf("%d", &search_id);
     while (getchar() != '\n');
-    
     for (int i = 0; i < count; i++) {
         if (newairplan[i].id == search_id) {
             found_index = i;
