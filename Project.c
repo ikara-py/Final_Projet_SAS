@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #define MAX_AIRPLANES 200
 #define inner_string_size 50
@@ -360,5 +361,14 @@ void statistics() {
 }
 
 void sort(){
-    
+    airplanes swap;
+    for(int i =0; i<count - 1; i++){
+        for(int j =0; j< i - 1; j++){
+            if (newairplan[j].capacite > newairplan[j + 1].capacite) {
+                swap = newairplan[j];
+                newairplan[j] = newairplan[j + 1];
+                newairplan[j + 1] = swap;
+            }
+        }
+    }
 }
