@@ -5,8 +5,15 @@
 #define inner_string_size 50
 extern int count ;
 extern int total;
+extern int aviavble;
+extern int under_maintenance;
+extern int in_flight;
+
 int count = 0;
 int total = 0;
+int aviable = 0;
+int under_maintenance = 0;
+int in_flight = 0;
 
 typedef struct {
     char modele[50];
@@ -33,6 +40,8 @@ void update_Airplane();
 void update_statut();
 void update_capacity();
 void aviability();
+void update_modele();
+
 
 int main() {
     int choice;
@@ -204,11 +213,13 @@ void update_Airplane() {
     printf("1. update the modele \n");
     printf("2. update the capacity \n");
     printf("3. update aviability\n");
+    
 }
 
 void update_modele(){
     int search_id;
     int found = 0;
+    int choice;
     printf("Enter the ID : ");
     scanf("%d", &search_id);
     
@@ -237,10 +248,26 @@ void update_statut(){
     
     for(int i = 0; i< count; i++){
         if(newairplan[i].id == search_id){
-            char new_statut[20];
-            printf("Enter the new statut : ");
-            fgets(new_statut, 20, stdin);
-            strcpy(newairplan[i].modele, new_statut);
+            int choice = 0;
+            printf("Enter your choice: ");
+            scanf("%d", &choice);
+            // char new_statut[20];
+            aviability();
+            // printf("Enter the new statut : ");
+            // fgets(new_statut, 20, stdin);
+            // strcpy(newairplan[i].modele, new_statut);
+            if(choice == 1){
+                strcpy(newairplan[i].modele, "Available");
+                aviavble++;
+            }
+            else if(choice == 2){
+                strcpy(newairplan[i].modele, "under maintenance");
+                under_maintenance++;
+            }
+            else if(choice == 3){
+                strcpy(newairplan[i].modele, "in flight");
+                in_flight++;
+            }
             found = 1;
             printf("\nUpdated successfully!\n");
             break;
