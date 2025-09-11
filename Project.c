@@ -38,6 +38,7 @@ void update_capacity();
 void aviability();
 void update_modele();
 void statistics();
+void sort();
 
 int main() {
     int choice;
@@ -66,7 +67,8 @@ void AirplaneMenu() {
     printf("1. Add New Airplane\n");
     printf("2. View All Airplanes\n");
     printf("3. Update Airplane\n");
-    printf("4. Delete Airplane\n");
+    printf("4. Sort airplanes");
+    printf("5. Delete Airplane\n");
     printf("0. Back to Main Menu\n");
 }
 
@@ -95,6 +97,8 @@ void UserChoice(int choice) {
                         printf("Deleting an airplane\n");
                         deletAirplanes();
                         break;
+                    case 5:
+                        sort();
                     case 0:
                         printf("Returning to main menu\n");
                         break;
@@ -358,6 +362,11 @@ void statistics() {
     printf("Available: %d\n", aviable);
     printf("Under Maintenance: %d\n", under_maintenance);
     printf("In Flight: %d\n", in_flight);
+    int total_fleet_capcity = 0;
+    for(int i = 0; i<count; i++){
+        total_fleet_capcity = total_fleet_capcity + newairplan[i].capacite;
+    }
+    printf("Total fleet capacity is %d.", total_fleet_capcity);
 }
 
 void sort(){
