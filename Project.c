@@ -12,6 +12,12 @@ int in_flight = 0;
 int id_counter = 0;
 
 typedef struct {
+    int day;
+    int month;
+    int year;
+} date;
+typedef struct {
+    date entryDate;
     char modele[50];
     int id;
     int capacite;
@@ -19,10 +25,9 @@ typedef struct {
 } airplanes;
 airplanes newairplan[MAX_AIRPLANES];
 
+
 typedef struct {
-    char name[50];
-    airplanes flotte[MAX_AIRPLANES];
-    int nbairplanes;
+
 } airport;
 
 void Menu();
@@ -38,6 +43,7 @@ void aviability();
 void update_modele();
 void statistics();
 void sort();
+// void dateEntree();
 
 int main() {
     int choice;
@@ -136,7 +142,15 @@ void addAirplane() {
     id_counter++;
     newairplan[count].id = id_counter;
     printf("\nAirplane id is #%d\n", newairplan[count].id);
-
+    
+    printf("\nEnter the entry date\n");
+    printf("\nEnter the day : ");
+    scanf("%d", &newairplan[count].entryDate.day);
+    printf("\nEnter the month : ");
+    scanf("%d", &newairplan[count].entryDate.month);
+    printf("\nEnter the year : ");
+    scanf("%d", &newairplan[count].entryDate.year);
+    while (getchar() != '\n');
     printf("Enter the modele of the plane: ");
     fgets(newairplan[count].modele, inner_string_size, stdin);
     newairplan[count].modele[strcspn(newairplan[count].modele, "\n")] = 0;
@@ -177,12 +191,13 @@ void viewAirplanes() {
     for (int i = 0; i < count; i++) {
         printf("airplane #%d\n", i + 1);
         printf("ID: %d\n", newairplan[i].id);
+        printf("Date of entry: %d-%d-%d\n", newairplan[i].entryDate.day, newairplan[i].entryDate.month, newairplan[i].entryDate.year);
         printf("Modele: %s\n", newairplan[i].modele);
         printf("Statut: %s\n", newairplan[i].statut);
         printf("Capacite: %d\n", newairplan[i].capacite);
+        printf("\n");
     }
 }
-
 void deletAirplanes() {
     int search_id;
     int found_index = -1;
@@ -382,3 +397,11 @@ void sort(){
         }
     }
 }
+
+// void dateEntree(){
+//     printf("date of entre");
+//     printf("Enter the day : ");
+//     printf("Enter the month : ");
+//     printf("enter the year : ");
+
+// }
