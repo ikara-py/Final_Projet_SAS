@@ -46,6 +46,7 @@ void statistics();
 void sort();
 double Fleet_Occupancy();
 void airPort();
+void searchAirplane();
 
 int main() {
     newAirport.count = 0;
@@ -84,6 +85,7 @@ void AirplaneMenu() {
     printf("3. Update Airplane\n");
     printf("4. Sort airplanes\n");
     printf("5. Delete Airplane\n");
+    printf("6. Search Airplane\n");
     printf("0. Back to Main Menu\n");
 }
 
@@ -114,6 +116,10 @@ void UserChoice(int choice) {
                     case 5:
                         printf("Deleting an airplane\n");
                         deletAirplanes();
+                        break;
+                    case 6:
+                        printf("Searching for an airplane\n");
+                        searchAirplane();
                         break;
                     case 0:
                         printf("Returning to main menu\n");
@@ -153,7 +159,6 @@ void addAirplane() {
     newAirport.id_counter++;
     newAirport.newairplan[newAirport.count].id = newAirport.id_counter;
     printf("\nAirplane id is #%d\n", newAirport.newairplan[newAirport.count].id);
-    
     printf("\nEnter the entry date\n");
     printf("\nEnter the day : ");
     scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.day);
@@ -402,8 +407,7 @@ void sort() {
     printf(" 1. sort by capacity \n");
     printf(" 2. sort alphabiticly \n");
     scanf("%d", &tempChoice);
-    while (getchar() != '\n'); 
-    
+    while (getchar() != '\n');
     if (tempChoice == 1) {
         airplanes swap;
         for (int i = 0; i < newAirport.count - 1; i++) {
@@ -431,6 +435,7 @@ void sort() {
     } else {
         printf("Invalid choice.\n");
     }
+    viewAirplanes();
 }
 
 void airPort(){
@@ -479,4 +484,34 @@ double Fleet_Occupancy() {
     }
     double occupancy_co = ((double)newAirport.aviable / newAirport.total_airplanes) * 100;
     return occupancy_co;
+}
+
+void searchAirplane() {
+    int search_id;
+    int found_index = -1;
+    if (newAirport.count == 0) {
+        printf("No airplanes to search.\n");
+        return;
+    }
+    printf("Enter the ID to search for: ");
+    scanf("%d", &search_id);
+    while (getchar() != '\n');
+
+    for (int i = 0; i < newAirport.count; i++) {
+        if (newAirport.newairplan[i].id == search_id) {
+            found_index = i;
+            break;
+        }
+    }
+
+    if (found_index != -1) {
+        printf("\nAirplane found! Details:\n");
+        printf("ID: %d\n", newAirport.newairplan[found_index].id);
+        printf("Date of entry: %d-%d-%d\n", newAirport.newairplan[found_index].entryDate.day, newAirport.newairplan[found_index].entryDate.month, newAirport.newairplan[found_index].entryDate.year);
+        printf("Modele: %s\n", newAirport.newairplan[found_index].modele);
+        printf("Statut: %s\n", newAirport.newairplan[found_index].statut);
+        printf("Capacite: %d\n", newAirport.newairplan[found_index].capacite);
+    } else {
+        printf("No airplane with ID %d found.\n", search_id);
+    }
 }
