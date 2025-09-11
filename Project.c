@@ -363,7 +363,7 @@ void statistics() {
 void sort(){
     airplanes swap;
     for(int i =0; i<count - 1; i++){
-        for(int j =0; j< i - 1; j++){
+        for(int j =0; j< count - 1; j++){
             if (newairplan[j].capacite > newairplan[j + 1].capacite) {
                 swap = newairplan[j];
                 newairplan[j] = newairplan[j + 1];
