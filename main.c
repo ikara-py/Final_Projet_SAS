@@ -11,7 +11,7 @@ int main() {
     strcpy(newAirport.name, "Default Airport");
     newAirport.max_capacity = MAX_AIRPLANES;
     int choice;
-    do {
+    do {     //main menu loop
         Menu();
         printf("Enter your choice: ");
         scanf("%d", &choice);

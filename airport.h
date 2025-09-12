@@ -8,7 +8,7 @@
 
 #define MAX_AIRPLANES 200
 #define inner_string_size 50
-
+//functions
 void Menu();
 void UserChoice(int choice);
 void AirplaneMenu();
@@ -26,13 +26,13 @@ double Fleet_Occupancy();
 void airPort();
 void searchAirplane();
 
-typedef struct {
+typedef struct {   //structure for date
     int day;
     int month;
     int year;
 } date;
 
-typedef struct {
+typedef struct {    //structure for airplanes
     date entryDate;
     char modele[50];
     int id;
@@ -40,7 +40,7 @@ typedef struct {
     char statut[20];
 } airplanes;
 
-typedef struct {
+typedef struct {    //structure for air port
     char name[100];
     int max_capacity;
     int count;
