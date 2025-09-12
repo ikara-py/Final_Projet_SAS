@@ -25,6 +25,7 @@ void sort();
 double Fleet_Occupancy();
 void airPort();
 void searchAirplane();
+void changeAirportName();
 
 typedef struct {   //structure for date
     int day;

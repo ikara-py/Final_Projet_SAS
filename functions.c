@@ -6,6 +6,7 @@ void Menu() {  //print the main menu
     printf("2. Airport Information\n");
     printf("3. Park Occupancy Calculation\n");
     printf("4. Statistics\n");
+    printf("5. change Airport name\n");
     printf("0. Exit\n");
 }
 
@@ -71,6 +72,8 @@ void UserChoice(int choice) {   //manage the user choice
         case 4:
             statistics();      //show the statistics
             break;
+        case 5:
+            changeAirportName();
         case 0:
             printf("Exiting application. Thank you!\n");
             break;
@@ -445,4 +448,14 @@ void searchAirplane() {  //search by id
     } else {
         printf("No airplane with ID %d found.\n", search_id);
     }
+}
+
+void changeAirportName() {
+    char newName[100];
+    printf("Enter the new airport name: ");
+    fgets(newName, sizeof(newName), stdin);
+    newName[strcspn(newName, "\n")] = '\0';
+
+    strcpy(newAirport.name, newName);
+    printf("Successfully changed to %s.\n", newAirport.name);
 }
