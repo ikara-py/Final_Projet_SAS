@@ -94,12 +94,37 @@ void addAirplane() {    //function to add a new airplane to the database
     newAirport.newairplan[newAirport.count].id = newAirport.id_counter;    //assign the unique id
     printf("\nAirplane id is #%d\n", newAirport.newairplan[newAirport.count].id);
     printf("\nEnter the entry date\n");
-    printf("\nEnter the day : ");
-    scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.day);
-    printf("\nEnter the month : ");
-    scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.month);
-    printf("\nEnter the year : ");
-    scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.year);
+    do {              // Day input loop: must be 1 to 31
+        printf("Enter the day (1-31): ");
+        scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.day);
+        while(getchar()!= '\n');                    // clear buffer
+        if (newAirport.newairplan[newAirport.count].entryDate.day < 1 || 
+            newAirport.newairplan[newAirport.count].entryDate.day > 31) {
+            printf("Invalid day, try again.\n");
+        }
+    } while (newAirport.newairplan[newAirport.count].entryDate.day < 1 || 
+            newAirport.newairplan[newAirport.count].entryDate.day > 31);
+
+    do {                 // Month input loop: must be 1 to 12
+        printf("Enter the month (1-12): ");
+        scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.month);
+        while(getchar()!= '\n');
+        if (newAirport.newairplan[newAirport.count].entryDate.month < 1 || 
+            newAirport.newairplan[newAirport.count].entryDate.month > 12) {
+            printf("Invalid month, try again.\n");
+        }
+    } while (newAirport.newairplan[newAirport.count].entryDate.month < 1 || 
+            newAirport.newairplan[newAirport.count].entryDate.month > 12);
+
+    do {             // Year input loop: example between 1900 and 2100
+        printf("Enter the year (1900-2100): ");
+        scanf("%d", &newAirport.newairplan[newAirport.count].entryDate.year);
+        if (newAirport.newairplan[newAirport.count].entryDate.year < 1900 || 
+            newAirport.newairplan[newAirport.count].entryDate.year > 2100) {
+            printf("Invalid year, try again.\n");
+        }
+    } while (newAirport.newairplan[newAirport.count].entryDate.year < 1900 || 
+            newAirport.newairplan[newAirport.count].entryDate.year > 2100);
     while (getchar() != '\n');      //get ride of scanf   input buffer
     printf("Enter the modele of the plane: ");
     fgets(newAirport.newairplan[newAirport.count].modele, inner_string_size, stdin);
